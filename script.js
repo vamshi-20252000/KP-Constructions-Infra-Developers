@@ -1,69 +1,66 @@
-/* script.js - KP Constructions */
+// Scroll animation  //
 
-document.addEventListener('DOMContentLoaded', () => {
-    const header = document.getElementById('header');
-
-    // Header Scroll Effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
     });
+  }, { threshold: 0.1 });
+  
+  document.querySelectorAll(".animate").forEach(section => {
+    observer.observe(section);
+  });
+  
 
-    // Mobile Menu (Placeholder for now)
-    const mobileBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (mobileBtn) {
-        mobileBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            mobileBtn.classList.toggle('toggle');
-        });
+  
+  
+  // whatsapp logic //
+  
+  function openWhatsApp(propertyName) {
+    const number = "917989195689";
+    let message = "Hello, I want more info!";
+    if (propertyName) {
+      message = `Hello, I want more info about ${propertyName}!`;
     }
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+  
+  // Phone Or Whatsapp Redirect //
+  
+  const phoneLink1 = document.getElementById('phoneLink1');
+  const phoneLink2 = document.getElementById('phoneLink2');
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1
-    };
+  if (phoneLink1) {
+    const num1 = '+917989195689';
+    phoneLink1.href = isMobile ? `tel:${num1}` : `https://wa.me/${num1.replace('+', '')}`;
+  }
+  if (phoneLink2) {
+    const num2 = '+919030454645';
+    phoneLink2.href = isMobile ? `tel:${num2}` : `https://wa.me/${num2.replace('+', '')}`;
+  }
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.stat-item, .section-title, .project-card, .service-card, .about-img-wrapper, .about-text, .contact-info, .contact-form').forEach(el => {
-        el.classList.add('animate-up');
-        observer.observe(el);
-    });
-
-    // WhatsApp Integration
-    const whatsappForm = document.getElementById('whatsappForm');
-    if (whatsappForm) {
-        whatsappForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const projectType = document.getElementById('projectType').value;
-            const message = document.getElementById('message').value;
-
-            const whatsappNumber = "917032653963"; // User requested number
-            const text = `*New Inquiry from KP Constructions Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Project Type:* ${projectType}%0A*Message:* ${message}`;
-
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${text}`;
-
-            // Open WhatsApp
-            window.open(whatsappUrl, '_blank');
-
-            // Show Success Notification
-            alert("Thank you! Your inquiry has been prepared for WhatsApp. Please click 'Send' in the WhatsApp app.");
-            whatsappForm.reset();
-        });
+  // Contact Form Submission to WhatsApp //
+  
+  function sendContactToWhatsApp(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const projectType = document.getElementById('contactProjectType').value;
+    const message = document.getElementById('contactMessage').value.trim();
+    
+    if (!name || !message) {
+      alert("Please fill in your Name and Message.");
+      return;
     }
-});
+    
+    const number = "917989195689"; 
+    
+    const text = `Hello KP Constructions,\n\nI want to get in touch!\n\n*Name:* ${name}\n*Email:* ${email || 'Not provided'}\n*Project Type:* ${projectType}\n*Message:* ${message}`;
+    
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
